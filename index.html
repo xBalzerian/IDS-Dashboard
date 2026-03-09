@@ -3,222 +3,663 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instant Data Scraper - Social Media Dashboard</title>
+    <title>IDS Content Command Center | Marketing Arsenal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
         }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        header {
+        
+        /* Header */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 60px 20px;
             text-align: center;
-            padding: 40px 20px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
         }
-        header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            background: linear-gradient(135deg, #e94560, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+        
+        .badge::before {
+            content: '🔥';
         }
-        header p { color: #94a3b8; font-size: 1.1rem; }
-        .nav-tabs {
+        
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .hero p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .stats-bar {
             display: flex;
-            gap: 10px;
             justify-content: center;
-            margin-bottom: 30px;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
             flex-wrap: wrap;
         }
-        .nav-tab {
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        .nav-tab:hover, .nav-tab.active {
-            background: #e94560;
-            border-color: #e94560;
-        }
-        .post-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .post-number {
-            background: linear-gradient(135deg, #e94560, #ff6b6b);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        .post-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
-        .post-subtitle { color: #94a3b8; font-size: 0.9rem; margin-top: 5px; }
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 25px 0 15px;
-            color: #e94560;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .image-prompt-box {
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            padding: 20px;
-            border-left: 4px solid #e94560;
-            margin: 15px 0;
-        }
-        .image-prompt-box h4 {
-            color: #e94560;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-        }
-        .image-prompt {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-        }
-        .copy-btn {
-            background: #e94560;
-            color: white;
+        
+        .action-btn {
+            padding: 14px 28px;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            font-weight: 500;
-            margin-top: 15px;
             transition: all 0.3s;
-        }
-        .copy-btn:hover { background: #ff6b6b; transform: translateY(-2px); }
-        .content-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .content-box h4 {
-            color: #60a5fa;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .content-text {
-            white-space: pre-wrap;
-            line-height: 1.8;
-            font-size: 0.95rem;
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
         }
-        .platform-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+        
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.5);
+        }
+        
+        .action-btn.secondary {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        
+        .action-btn.secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 16px 28px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
             font-weight: 600;
-            margin-right: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .badge-instagram { background: #E4405F; }
-        .badge-linkedin { background: #0A66C2; }
-        .badge-pinterest { background: #E60023; }
-        .hidden { display: none; }
-        .image-preview {
-            width: 100%;
-            max-width: 800px;
-            height: 350px;
-            background: linear-gradient(135deg, #2d2d44, #1a1a2e);
-            border-radius: 15px;
+        
+        .nav-tab:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(99,102,241,0.3);
+        }
+        
+        .nav-tab .number {
+            background: rgba(255,255,255,0.2);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        /* Post Cards */
+        .post-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .post-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .post-meta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .post-meta p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .engagement-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 30px 0 20px;
+        }
+        
+        .section-header h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .section-icon.purple { background: #ede9fe; }
+        .section-icon.blue { background: #dbeafe; }
+        .section-icon.green { background: #d1fae5; }
+        .section-icon.orange { background: #ffedd5; }
+        
+        /* Prompt Box */
+        .prompt-box {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            border-radius: 20px;
+            padding: 30px;
             margin: 20px 0;
-            border: 2px dashed rgba(255,255,255,0.2);
-            color: #94a3b8;
-            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
         }
-        .tips-box {
-            background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(255,107,107,0.1));
-            border-radius: 15px;
+        
+        .prompt-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(99,102,241,0.3), transparent);
+            border-radius: 50%;
+        }
+        
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .prompt-header h4 {
+            color: #a5b4fc;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .prompt-badge {
+            background: rgba(99,102,241,0.3);
+            color: #c7d2fe;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .prompt-content {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
             padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(233,69,96,0.3);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: #e0e7ff;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            position: relative;
+            z-index: 1;
         }
-        .tips-box h4 { color: #e94560; margin-bottom: 10px; }
-        .tips-box ul { margin-left: 20px; color: #cbd5e1; }
-        .tips-box li { margin: 8px 0; }
+        
+        .prompt-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Content Box */
+        .content-box {
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .content-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .platform-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .platform-tag.ig {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+        
+        .platform-tag.li {
+            background: #0077b5;
+            color: white;
+        }
+        
+        .platform-tag.pi {
+            background: #e60023;
+            color: white;
+        }
+        
+        .content-text {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+        
+        /* Tips Box */
+        .tips-box {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border: 2px solid #a7f3d0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+        
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tips-header h4 {
+            color: #065f46;
+            font-weight: 700;
+        }
+        
+        .tips-box ul {
+            margin-left: 20px;
+            color: #047857;
+        }
+        
+        .tips-box li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        .tips-box strong {
+            color: #065f46;
+        }
+        
+        /* Hidden */
+        .hidden { display: none !important; }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(16,185,129,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .stats-bar { flex-direction: column; gap: 20px; }
+            .post-header { flex-direction: column; }
+            .nav-tab { padding: 12px 20px; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🚀 Social Media Content Dashboard</h1>
-            <p>Instant Data Scraper | Hook-Worthy Content | Ready to Post</p>
-        </header>
+    <div class="hero">
+        <div class="hero-content">
+            <div class="badge">Live Marketing Arsenal</div>
+            <h1>Content Command Center</h1>
+            <p>Instant Data Scraper social media posts that convert. Copy, customize, dominate.</p>
+            
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Viral Post Templates</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Avg Reply Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">$12K</div>
+                    <div class="stat-label">Potential/Month</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="nav-tabs">
-            <div class="nav-tab active" onclick="showPost(1)">Post 1: Ugly Website</div>
-            <div class="nav-tab" onclick="showPost(2)">Post 2: DM Strategy</div>
-            <div class="nav-tab" onclick="showPost(3)">Post 3: Restaurant Story</div>
-            <div class="nav-tab" onclick="showPost(4)">Post 4: $12K Month</div>
-            <div class="nav-tab" onclick="showPost(5)">Post 5: Law Firm Hook</div>
+    <div class="container">
+        <div class="quick-actions">
+            <button class="action-btn primary" onclick="copyAllPrompts()">
+                📋 Copy All Prompts
+            </button>
+            <button class="action-btn secondary" onclick="scrollToKie()">
+                🎨 Open Kie.ai
+            </button>
         </div>
 
-        <!-- POST 1: Ugly Website Discovery -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showPost(1)">
+                <span class="number">1</span>
+                Ugly Website Hook
+            </div>
+            <div class="nav-tab" onclick="showPost(2)">
+                <span class="number">2</span>
+                DM Strategy
+            </div>
+            <div class="nav-tab" onclick="showPost(3)">
+                <span class="number">3</span>
+                Restaurant Story
+            </div>
+            <div class="nav-tab" onclick="showPost(4)">
+                <span class="number">4</span>
+                $12K Revenue
+            </div>
+            <div class="nav-tab" onclick="showPost(5)">
+                <span class="number">5</span>
+                Law Firm Gold
+            </div>
+        </div>
+
+        <!-- POST 1 -->
         <div id="post-1" class="post-card">
             <div class="post-header">
-                <div>
-                    <div class="post-number">01</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="post-title">The Ugly Website Discovery</div>
-                    <div class="post-subtitle">Split Screen Hook | High Contrast Visual</div>
+                <div class="post-icon">⚡</div>
+                <div class="post-meta">
+                    <h2>The Ugly Website Discovery</h2>
+                    <p>Split-screen shock factor. Makes viewers stop and stare.</p>
                 </div>
             </div>
 
-            <div class="section-title">🎨 Image Prompt (Kie.ai)</div>
-            <div class="image-prompt-box">
-                <h4>⚡ Copy this prompt to Kie.ai (Nano Banana 2, 21:9 ratio, 1K quality):</h4>
-                <div class="image-prompt">Ultra-detailed split screen comparison of website designs. LEFT SIDE: chaotic ugly website from 2005, bright red text on neon blue background, animated GIFs, Comic Sans font, broken layout, cluttered sidebars, flashing banner ads, yellow highlighting, clip art graphics, frames and tables, visitor counter. RIGHT SIDE: elegant modern website 2024, clean white space, sophisticated serif typography, professional photography, subtle animations, responsive grid layout, soft shadows, premium feel. Dramatic studio lighting, cinematic color grading, 21:9 cinematic aspect ratio, professional advertising photography style, hyper-realistic detail</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Prompt</button>
+            <div class="section-header">
+                <div class="section-icon purple">🎨</div>
+                <h3 style="color: #7c3aed;">Kie.ai Prompt</h3>
             </div>
 
-            <div class="image-preview">
-                [Generate image using prompt above in Kie.ai]
+            <div class="prompt-box">
+                <div class="prompt-header">
+                    <h4>Ultra-Detailed Generation Prompt</h4>
+                    <span class="prompt-badge">21:9 | 1K Quality</span>
+                </div>
+                <div class="prompt-content" id="prompt-1">Cinematic split-screen composition, extreme detail, professional advertising photography.
+
+LEFT SIDE - The Nightmare Website (2005 era):
+- Cluttered layout with 15+ competing visual elements fighting for attention
+- Background: aggressive repeating tile pattern in neon green and hot pink
+- Header: animated GIF fireworks with "WELCOME!!!" in blinking red Comic Sans
+- Main text: bright yellow 8pt font on electric blue background (illegible contrast)
+- Multiple broken image placeholders showing red X icons
+- Marquee scrolling text banner at top: "BEST BUSINESS EVER!!!"
+- Autoplay MIDI music icon with dancing hamster animation
+- Hit counter showing "000042 visitors" in pixelated green LED style
+- Frames and tables creating visual prison, 5 nested scrollbars
+- Popup window overlapping main content: "YOU WON!!! CLICK HERE"
+- 12 different font families randomly mixed
+- Background music visualizer bars
+- Under construction GIF with digging man animation
+- Guestbook link with animated mailbox icon
+- Webring navigation at bottom
+
+RIGHT SIDE - Premium Modern Website (2026):
+- Expansive negative space, breathing room, luxury feel
+- Background: subtle gradient from warm white to soft cream
+- Hero section: full-bleed professional photography, shallow depth of field
+- Typography: elegant serif headlines (Playfair Display style), clean sans-serif body (Inter)
+- Sophisticated color palette: navy, gold accents, warm neutrals
+- Micro-interactions suggested: subtle hover states, smooth shadows
+- Grid system: golden ratio proportions, perfect alignment
+- High-end photography: professional models, studio lighting, 8K detail
+- Loading state: elegant skeleton screens
+- Navigation: minimal, sticky, smart hide/show
+- Mobile-responsive breakpoints visible
+- Accessibility features: proper contrast, focus states
+- Performance metrics: instant load feeling
+
+LIGHTING & COMPOSITION:
+- Dramatic studio lighting from upper left
+- Soft volumetric fog between the two sides
+- Cinematic color grading: teal shadows, warm highlights
+- 21:9 aspect ratio for maximum cinematic impact
+- Shallow depth of field on both sides
+- Volumetric god rays separating old vs new
+- Professional lens flare accents
+- Film grain texture for premium feel
+- Shot on Arri Alexa, 50mm anamorphic lens
+
+STYLE: Hyper-realistic, advertising campaign quality, pixel-perfect UI detail, Unreal Engine 5 render quality, ray-traced lighting, subsurface scattering on skin if visible, 8K resolution detail</div>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="copyText('prompt-1')">📋 Copy Prompt</button>
+                    <button class="btn btn-secondary" onclick="copyText('caption-1')">📱 Copy Caption</button>
+                </div>
             </div>
 
-            <div class="section-title">📝 Instagram Caption</div>
+            <div class="section-header">
+                <div class="section-icon blue">📱</div>
+                <h3 style="color: #2563eb;">Instagram Caption</h3>
+            </div>
+
             <div class="content-box">
-                <h4><span class="platform-badge badge-instagram">INSTAGRAM</span> Click to copy</h4>
-                <div class="content-text">Website A vs Website B
+                <div class="content-text" id="caption-1">Website A vs Website B
 Same city. Same industry.
 
 One makes $500K/year 💰
@@ -248,88 +689,92 @@ Link in bio 👆
 .
 .
 #webdesign #digitalmarketing #smallbusiness #entrepreneur #marketingtips #businessgrowth #freelancer #leadgeneration #websitedesign #socialmediamarketing</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Instagram Caption</button>
-            </div>
-
-            <div class="section-title">💼 LinkedIn Post</div>
-            <div class="content-box">
-                <h4><span class="platform-badge badge-linkedin">LINKEDIN</span> Long-form educational</h4>
-                <div class="content-text">I spent 2 hours yesterday analyzing 500 local business websites.
-
-The results were shocking:
-
-• 67% had websites that looked 10+ years old
-• 43% had NO social media presence  
-• 81% weren't mobile-optimized
-• 92% had broken contact forms
-
-These businesses are losing customers every single day.
-
-And they're sitting there wondering why their competitor across the street is thriving.
-
-The answer is simple: professional web presence.
-
-Here's what changed everything for me:
-
-I stopped cold pitching random businesses and started targeting businesses with a SPECIFIC pain point: outdated websites.
-
-I built a tool that finds them automatically:
-
-1. Scrapes Google for businesses in any niche/location
-2. Analyzes website quality (age, mobile-friendly, design)
-3. Checks social media presence (or lack thereof)
-4. Extracts owner contact information
-5. Exports to a ready-to-contact spreadsheet
-
-Yesterday, I sent 20 personalized emails to businesses I found.
-
-Got 7 replies.
-
-3 booked calls.
-
-This is the future of lead generation for service providers.
-
-What's your current client acquisition strategy?
-
-#leadgeneration #webdesign #digitalmarketing #b2b #sales #entrepreneurship</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy LinkedIn Post</button>
             </div>
 
             <div class="tips-box">
-                <h4>💡 Why This Post Works:</h4>
+                <div class="tips-header">
+                    <span>💡</span>
+                    <h4>Why This Converts</h4>
+                </div>
                 <ul>
-                    <li><strong>Visual Hook:</strong> Split screen creates instant contrast and curiosity</li>
-                    <li><strong>Relatability:</strong> Everyone has seen ugly websites - they know the problem exists</li>
-                    <li><strong>Income Gap:</strong> $500K vs $50K creates desire to know the difference</li>
-                    <li><strong>Tool Tease:</strong> Shows the solution without giving away everything</li>
-                    <li><strong>CTA:</strong> Link in bio drives traffic to your tool</li>
+                    <li><strong>Visual Hook:</strong> Extreme contrast creates instant curiosity gap</li>
+                    <li><strong>Income Gap:</strong> $500K vs $50K triggers FOMO and desire</li>
+                    <li><strong>Tool Tease:</strong> Shows solution without revealing everything</li>
+                    <li><strong>CTA:</strong> "Link in bio" drives traffic directly</li>
                 </ul>
             </div>
         </div>
 
-        <!-- POST 2: DM Strategy -->
+        <!-- POST 2 -->
         <div id="post-2" class="post-card hidden">
             <div class="post-header">
-                <div>
-                    <div class="post-number">02</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="post-title">The DM Strategy</div>
-                    <div class="post-subtitle">Phone Screen Mockup | Conversational Hook</div>
+                <div class="post-icon">💬</div>
+                <div class="post-meta">
+                    <h2>The DM Strategy</h2>
+                    <p>Exact script that gets 40% reply rate. Steal it.</p>
                 </div>
             </div>
 
-            <div class="section-title">🎨 Image Prompt (Kie.ai)</div>
-            <div class="image-prompt-box">
-                <h4>⚡ Copy this prompt to Kie.ai (Nano Banana 2, 21:9 ratio, 1K quality):</h4>
-                <div class="image-prompt">Hyper-realistic smartphone close-up showing Instagram DM conversation on screen. Modern minimalist desk setup, MacBook Pro in background, artisan coffee cup, small succulent plant. Screen shows professional outreach message with notification badges. Split composition with floating holographic "40% Reply Rate" badge. Soft natural window lighting, shallow depth of field, professional product photography, warm color tones, 21:9 cinematic aspect ratio, ultra-detailed, 8K quality render, advertising photography style</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Prompt</button>
+            <div class="prompt-box">
+                <div class="prompt-header">
+                    <h4>Ultra-Detailed Generation Prompt</h4>
+                    <span class="prompt-badge">21:9 | 1K Quality</span>
+                </div>
+                <div class="prompt-content" id="prompt-2">Hyper-realistic lifestyle photography, professional product shot, extreme attention to detail.
+
+MAIN SUBJECT - iPhone 16 Pro Max:
+- Floating at 15-degree angle, screen facing camera
+- Screen showing Instagram DM interface, message thread visible
+- Message bubble: "Hey Sarah! Love your restaurant! Noticed your website isn't mobile-friendly - you're losing 60% of potential customers. I help businesses like yours fix this. Worth a 10-min chat?"
+- Reply bubble showing: "Yes! When are you free? 🙏"
+- Notification badge: "3 new messages"
+- Time stamp: "2m ago"
+- Instagram UI: authentic icons, proper spacing, iOS design language
+- Holographic "40% REPLY RATE" badge floating above phone
+- Subtle glow effect around successful conversation
+
+ENVIRONMENT - Modern Creative Workspace:
+- White oak desk surface, visible wood grain texture
+- MacBook Pro M4 in background (screen slightly blurred showing similar analytics)
+- Artisan ceramic coffee cup, latte art visible
+- Small succulent in concrete planter
+- Leather notebook with gold pen
+- Warm afternoon window light streaming in
+- City skyline visible through window (bokeh)
+- Indoor plant leaves in foreground (depth)
+
+LIGHTING & ATMOSPHERE:
+- Golden hour lighting (4:30 PM vibe)
+- Soft window light from left creating gentle shadows
+- Rim lighting on phone from behind
+- Warm color temperature (3200K)
+- Volumetric dust particles in light beams
+- Lens flare from window light
+- Shallow depth of field: f/1.8 aperture effect
+- Cinematic color grading: warm shadows, slightly lifted blacks
+
+TECHNICAL DETAILS:
+- 21:9 aspect ratio for social media impact
+- Shot on Sony A7IV with 85mm f/1.4 GM lens
+- Hyper-realistic skin texture if hands visible
+- Reflections in phone screen showing environment
+- Micro-scratches on desk adding realism
+- Subtle chromatic aberration for lens authenticity
+- Film grain overlay (Kodak Portra 400 style)
+
+MOOD: Successful, professional, inviting, aspirational, "I want this setup"</div>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="copyText('prompt-2')">📋 Copy Prompt</button>
+                    <button class="btn btn-secondary" onclick="copyText('caption-2')">📱 Copy Caption</button>
+                </div>
             </div>
 
-            <div class="section-title">📝 Instagram Caption</div>
             <div class="content-box">
-                <h4><span class="platform-badge badge-instagram">INSTAGRAM</span> Click to copy</h4>
-                <div class="content-text">Stop sending cold DMs that get ignored ❌
+                <div class="content-header">
+                    <span class="platform-tag ig">📷 Instagram</span>
+                </div>
+                <div class="content-text" id="caption-2">Stop sending cold DMs that get ignored ❌
 
 Try this instead:
 
@@ -379,45 +824,82 @@ The tool? Link in bio 👆
 .
 .
 .
-#coldoutreach #sales #freelancer #webdesign #marketingtips #dmscripts #leadgeneration #socialmediamarketing #salesstrategy #entrepreneur</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Instagram Caption</button>
-            </div>
-
-            <div class="tips-box">
-                <h4>💡 Why This Post Works:</h4>
-                <ul>
-                    <li><strong>Before/After:</strong> "Stop X, try Y" format creates contrast</li>
-                    <li><strong>Template Included:</strong> Gives immediate value (the script)</li>
-                    <li><strong>Proof:</strong> 40% reply rate shows it actually works</li>
-                    <li><strong>Qualification:</strong> Explains WHO to target</li>
-                    <li><strong>Tool Tease:</strong> Reveals the secret sauce at the end</li>
-                </ul>
+#coldoutreach #sales #freelancer #webdesign #marketingtips #dmscripts #leadgeneration</div>
             </div>
         </div>
 
-        <!-- POST 3: Restaurant Story -->
+        <!-- POST 3 -->
         <div id="post-3" class="post-card hidden">
             <div class="post-header">
-                <div>
-                    <div class="post-number">03</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="post-title">The Restaurant Transformation</div>
-                    <div class="post-subtitle">Before/After Story | Emotional Hook</div>
+                <div class="post-icon">🍽️</div>
+                <div class="post-meta">
+                    <h2>The Restaurant Transformation</h2>
+                    <p>Before/after story that hits emotionally. Gets shares.</p>
                 </div>
             </div>
 
-            <div class="section-title">🎨 Image Prompt (Kie.ai)</div>
-            <div class="image-prompt-box">
-                <h4>⚡ Copy this prompt to Kie.ai (Nano Banana 2, 21:9 ratio, 1K quality):</h4>
-                <div class="image-prompt">Dramatic split screen restaurant interior transformation. LEFT SIDE: empty dark restaurant, "Closed" sign on door, outdated 1980s decor, dusty tables, no customers, depressing atmosphere, warm tungsten lighting. RIGHT SIDE: same restaurant bustling with happy customers, modern minimalist design, Instagram-worthy aesthetic, neon accent lighting, plants, open kitchen, full tables, line out the door, vibrant energy. Golden hour lighting transition between scenes, 21:9 cinematic aspect ratio, professional food photography, photorealistic detail, advertising campaign quality</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Prompt</button>
+            <div class="prompt-box">
+                <div class="prompt-content" id="prompt-3">Dramatic cinematic transformation scene, split-screen storytelling, professional film production quality.
+
+LEFT SIDE - The Struggling Restaurant (BEFORE):
+- Empty dining room, 25 tables all vacant
+- Flickering fluorescent lights (one tube dying, buzzing)
+- Dust visible on tabletops in light beams
+- "CLOSED" sign hanging crooked on door
+- 1980s decor: dusty velvet curtains, faded carpet patterns
+- Yellowed menu boards, prices crossed out multiple times
+- Stack of chairs on tables
+- Calendar on wall showing 2022 (stuck in time)
+- Health inspection grade: B (visible)
+- Empty tip jar on counter
+- Clock showing 7:30 PM (prime dinner hour, should be busy)
+- Newspaper from last week on table
+- Cobweb in corner near ceiling
+- Depressing color palette: browns, grays, desaturated
+- Single sad ceiling fan spinning slowly
+
+RIGHT SIDE - The Thriving Restaurant (AFTER):
+- Same space, completely transformed
+- Every table full, line out the door visible
+- Warm Edison bulb lighting, perfect ambiance
+- Modern minimalist design: concrete floors, exposed brick
+- Living plant wall feature
+- Open kitchen with chefs visible, action happening
+- Instagram-worthy food presentation on tables
+- Diverse crowd: families, couples, groups laughing
+- Server carrying tray of colorful cocktails
+- Neon accent sign: "FRESH DAILY" in warm white
+- Large windows showing sunset golden hour
+- Long exposure motion blur on moving people (energy)
+- Waitlist tablet showing "45 min wait"
+- Review cards on tables: "5 STARS"
+
+CENTER TRANSITION:
+- Vertical light beam dividing the two scenes
+- Floating particles in the light (transformation magic)
+- Subtle lens flare at intersection point
+
+LIGHTING & CINEMATOGRAPHY:
+- Left: Cool tungsten, harsh shadows, clinical feel
+- Right: Warm golden hour, soft diffusion, inviting
+- Anamorphic lens flares
+- Cinematic aspect ratio 21:9
+- Film grain: subtle, premium feel
+- Color grading: teal shadows on left, warm gold on right
+
+STYLE: Award-winning documentary photography, National Geographic quality, cinematic storytelling, Unreal Engine 5 ray-traced lighting, 8K textures</div>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="copyText('prompt-3')">📋 Copy Prompt</button>
+                    <button class="btn btn-secondary" onclick="copyText('caption-3')">📱 Copy Caption</button>
+                </div>
             </div>
 
-            <div class="section-title">📝 Instagram Caption</div>
             <div class="content-box">
-                <h4><span class="platform-badge badge-instagram">INSTAGRAM</span> Click to copy</h4>
-                <div class="content-text">This restaurant was dead for months 📉
+                <div class="content-header">
+                    <span class="platform-tag ig">📷 Instagram</span>
+                </div>
+                <div class="content-text" id="caption-3">This restaurant was dead for months 📉
 
 Empty tables. No customers. Owner was ready to close.
 
@@ -428,7 +910,7 @@ But they had one fatal problem:
 ❌ No Facebook  
 ❌ No TikTok
 
-In 2024, 94% of customers check social media before visiting.
+In 2026, 94% of customers check social media before visiting.
 
 They were invisible to Gen Z.
 Completely invisible.
@@ -469,45 +951,74 @@ Tool that finds them? Link in bio 👆
 .
 .
 .
-#restaurantmarketing #socialmediamarketing #smallbusiness #hospitality #marketingtips #digitalmarketing #socialmedia #contentmarketing #restaurantowner #marketingstrategy</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Instagram Caption</button>
-            </div>
-
-            <div class="tips-box">
-                <h4>💡 Why This Post Works:</h4>
-                <ul>
-                    <li><strong>Story Arc:</strong> Dead → Discovered → Transformed → Success</li>
-                    <li><strong>Emotional Hook:</strong> "Ready to close" creates empathy</li>
-                    <li><strong>Specific Stats:</strong> 94%, 10,000+, 20 minutes (concrete)</li>
-                    <li><strong>Visual Journey:</strong> Empty → Full restaurant</li>
-                    <li><strong>Scalability Proof:</strong> 200+ more found, 3 more deals</li>
-                </ul>
+#restaurantmarketing #socialmediamarketing #smallbusiness #hospitality #marketingtips</div>
             </div>
         </div>
 
-        <!-- POST 4: $12K Month -->
+        <!-- POST 4 -->
         <div id="post-4" class="post-card hidden">
             <div class="post-header">
-                <div>
-                    <div class="post-number">04</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="post-title">The $12K Month Breakdown</div>
-                    <div class="post-subtitle">Revenue Proof | Numbers Hook</div>
+                <div class="post-icon">💰</div>
+                <div class="post-meta">
+                    <h2>The $12K Month Revenue Proof</h2>
+                    <p>Numbers don't lie. Income proof gets saves.</p>
                 </div>
             </div>
 
-            <div class="section-title">🎨 Image Prompt (Kie.ai)</div>
-            <div class="image-prompt-box">
-                <h4>⚡ Copy this prompt to Kie.ai (Nano Banana 2, 21:9 ratio, 1K quality):</h4>
-                <div class="image-prompt">Premium laptop on modern minimalist desk showing business dashboard with $12,000 revenue displayed prominently. Multiple floating holographic notification bubbles showing "New Client Signed +$3,000", "Payment Received", "Meeting Booked". Spreadsheet with business lead data visible on screen. Clean workspace aesthetic, professional lighting, shallow depth of field, 21:9 cinematic aspect ratio, professional business photography, tech startup vibe, ultra-detailed 8K render, advertising quality</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Prompt</button>
+            <div class="prompt-box">
+                <div class="prompt-content" id="prompt-4">Professional business photography, success visualization, hyper-realistic workspace scene.
+
+MAIN FOCUS - MacBook Pro M4 Max:
+- Screen showing custom business dashboard
+- Large central metric: "$12,000" in massive green numbers with upward arrow
+- Sub-metrics visible:
+  * "4 Clients Closed"
+  * "20 Hours Worked"
+  * "$600/Hour Rate"
+  * "35% Response Rate"
+- Animated notification bubbles floating from screen:
+  * "💰 Payment Received: $3,000"
+  * "📅 New Meeting Booked"
+  * "🎉 Client Signed: Thompson Law"
+  * "📊 100 Leads Scraped Today"
+- Spreadsheet visible in background tab showing lead data
+- Calendar app showing booked calls
+- Dark mode interface with accent colors
+
+WORKSPACE - Premium Minimalist Setup:
+- White standing desk, cable management perfect
+- Studio Display as second monitor (blurred, showing charts)
+- Mechanical keyboard (cream switches), artisan keycap
+- Wireless mouse on leather pad
+- Small desk plant: bonsai tree
+- Motivational book: "Atomic Habits" visible
+- Noise-cancelling headphones (Sony WH-1000XM6)
+- Smartphone showing Stripe notification: "Payment received"
+- Coffee: ceramic pour-over, steam visible
+- Window view: city skyline at golden hour
+
+ATMOSPHERE & LIGHTING:
+- Late afternoon golden hour (5:00 PM)
+- Warm ambient light from right
+- Desk lamp providing task lighting from left
+- Screen glow reflecting on face (if visible)
+- Cinematic color palette: warm golds, deep shadows
+- Subtle haze/volumetric light
+- Premium feel: every object high-end
+
+STYLE: Apple commercial aesthetic, premium product photography, architectural digest quality, 8K render, ray-traced reflections</div>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="copyText('prompt-4')">📋 Copy Prompt</button>
+                    <button class="btn btn-secondary" onclick="copyText('caption-4')">📱 Copy Caption</button>
+                </div>
             </div>
 
-            <div class="section-title">📝 Instagram Caption</div>
             <div class="content-box">
-                <h4><span class="platform-badge badge-instagram">INSTAGRAM</span> Click to copy</h4>
-                <div class="content-text">I made $12,000 last month finding ugly websites 💰
+                <div class="content-header">
+                    <span class="platform-tag ig">📷 Instagram</span>
+                </div>
+                <div class="content-text" id="caption-4">I made $12,000 last month finding ugly websites 💰
 
 Here's the exact breakdown:
 
@@ -552,49 +1063,84 @@ The tool? Link in bio 👆
 .
 .
 .
-#freelancer #webdesign #digitalnomad #entrepreneur #makemoneyonline #sidehustle #freelancetips #passiveincome #businessowner #financialfreedom</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Instagram Caption</button>
-            </div>
-
-            <div class="tips-box">
-                <h4>💡 Why This Post Works:</h4>
-                <ul>
-                    <li><strong>Income Proof:</strong> $12K grabs attention immediately</li>
-                    <li><strong>Full Breakdown:</strong> Shows the math (builds credibility)</li>
-                    <li><strong>ROI Focus:</strong> 20 hours = $12K ($600/hour)</li>
-                    <li><strong>Process Reveal:</strong> 5-step system looks repeatable</li>
-                    <li><strong>Social Proof:</strong> Recent results (yesterday's numbers)</li>
-                </ul>
+#freelancer #webdesign #digitalnomad #entrepreneur #makemoneyonline #sidehustle</div>
             </div>
         </div>
 
-        <!-- POST 5: Law Firm Hook -->
+        <!-- POST 5 -->
         <div id="post-5" class="post-card hidden">
             <div class="post-header">
-                <div>
-                    <div class="post-number">05</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="post-title">The Law Firm Goldmine</div>
-                    <div class="post-subtitle">B2B Professional | High-Value Hook</div>
+                <div class="post-icon">⚖️</div>
+                <div class="post-meta">
+                    <h2>The Law Firm Goldmine</h2>
+                    <p>B2B professional hook. High-value clients only.</p>
                 </div>
             </div>
 
-            <div class="section-title">🎨 Image Prompt (Kie.ai)</div>
-            <div class="image-prompt-box">
-                <h4>⚡ Copy this prompt to Kie.ai (Nano Banana 2, 21:9 ratio, 1K quality):</h4>
-                <div class="image-prompt">Professional law office environment with dramatic split screen comparison on dual monitors. LEFT MONITOR: outdated law firm website, yellow pages style, Times New Roman font, cluttered layout, clip art graphics, 1990s web design, old CRT monitor aesthetic. RIGHT MONITOR: modern premium law firm website, elegant serif typography, professional attorney photography, clean whitespace, premium feel, modern iMac display. Professional lawyer in tailored suit working in background, prestigious office with leather chairs and law books. 21:9 cinematic aspect ratio, professional corporate photography, dramatic lighting, ultra-detailed, advertising campaign quality</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy Prompt</button>
+            <div class="prompt-box">
+                <div class="prompt-content" id="prompt-5">Premium corporate photography, professional law office environment, split-screen comparison.
+
+LEFT MONITOR - The Outdated Law Firm Website (The Problem):
+- Old CRT monitor aesthetic (slight curve, thick bezel)
+- Website: "JOHNSON & ASSOCIATES - ATTORNEYS AT LAW"
+- Yellowed background, Times New Roman font
+- Clipart gavel and scales of justice graphics
+- "Under Construction" banner with animated digger
+- Contact form with 15 required fields
+- Flashing "Call Now!!!" button in red
+- Award badges from 2008, 2010, 2012
+- "Best Lawyer" clip art trophy
+- Guestbook with 3 entries from 2015
+- Hit counter: "1,247 visitors"
+- Marquee text: "FREE CONSULTATION"
+- Broken image links (red X icons)
+- Background MIDI player icon
+- Frames creating scroll within scroll
+
+RIGHT MONITOR - Premium Modern Law Website (The Solution):
+- Latest iMac Pro, 5K display, thin bezels
+- Website: "Thompson Law Group"
+- Deep navy background, gold accents
+- Professional attorney photography: confident pose, tailored suit
+- Sophisticated serif typography (Canela or similar)
+- Client testimonial carousel: "5/5 Stars - 200+ Reviews"
+- "Schedule Consultation" elegant button
+- Blog section showing recent articles
+- Case results: "$2.4M recovered for client"
+- Live chat widget: "How can we help?"
+- Video background: professional office tour
+- Awards: Super Lawyers 2026, Avvo 10/10
+- SSL security badge
+- Mobile-responsive preview showing on iPad beside monitor
+
+ENVIRONMENT - Prestigious Law Office:
+- Mahogany partner desk, leather inlaid
+- Law books: leather-bound, gold lettering
+- Brass desk lamp (banker's style)
+- Judge's gavel as paperweight
+- Framed law degree on wall (ivy league)
+- Window: view of courthouse or city financial district
+- Leather chair (tufted, Chesterfield style)
+- Notepad with gold pen
+- Coffee table book: "Landmark Cases"
+
+STYLE: Architectural Digest photography, Rolex commercial aesthetic, premium corporate, Unreal Engine 5 photorealism, 8K textures, ray-traced global illumination</div>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="copyText('prompt-5')">📋 Copy Prompt</button>
+                    <button class="btn btn-secondary" onclick="copyText('caption-5')">📱 Copy Caption</button>
+                </div>
             </div>
 
-            <div class="section-title">💼 LinkedIn Post (Primary Platform)</div>
             <div class="content-box">
-                <h4><span class="platform-badge badge-linkedin">LINKEDIN</span> B2B Professional</h4>
-                <div class="content-text">Most law firms are leaving $100K+ on the table.
+                <div class="content-header">
+                    <span class="platform-tag li">💼 LinkedIn</span>
+                </div>
+                <div class="content-text" id="caption-5">Most law firms are leaving $100K+ on the table.
 
 Not because they're bad lawyers.
 
-Because their web presence is stuck in 2005.
+Because their web presence is stuck in 2010.
 
 I analyzed 200 law firm websites in Florida.
 
@@ -662,50 +1208,75 @@ This is a $100B+ industry hiding in plain sight.
 What's your take on the legal industry's digital transformation?
 
 #legalmarketing #webdesign #leadgeneration #lawfirmmarketing #b2b #digitaltransformation</div>
-                <button class="copy-btn" onclick="copyToClipboard(this)">📋 Copy LinkedIn Post</button>
-            </div>
-
-            <div class="tips-box">
-                <h4>💡 Why This Post Works:</h4>
-                <ul>
-                    <li><strong>High-Value Niche:</strong> Law firms = big budgets</li>
-                    <li><strong>Pain Point:</strong> $100K+ lost revenue</li>
-                    <li><strong>Research Data:</strong> 200 sites analyzed (credible)</li>
-                    <li><strong>Complete Template:</strong> Exact email to copy</li>
-                    <li><strong>Scale Potential:</strong> 47,000+ firms in US</li>
-                </ul>
             </div>
         </div>
+    </div>
 
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        ✅ Copied to clipboard!
     </div>
 
     <script>
+        // Show/Hide Posts
         function showPost(num) {
-            // Hide all posts
             document.querySelectorAll('.post-card').forEach(card => {
                 card.classList.add('hidden');
             });
-            // Show selected post
             document.getElementById('post-' + num).classList.remove('hidden');
-            // Update tabs
+            
             document.querySelectorAll('.nav-tab').forEach((tab, index) => {
-                if (index === num - 1) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
+                tab.classList.toggle('active', index === num - 1);
             });
         }
 
-        function copyToClipboard(btn) {
-            const contentBox = btn.previousElementSibling;
-            const text = contentBox.querySelector('.image-prompt, .content-text').innerText;
+        // Copy Text Function (Working)
+        function copyText(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText || element.textContent;
+            
             navigator.clipboard.writeText(text).then(() => {
-                btn.innerText = '✅ Copied!';
-                setTimeout(() => {
-                    btn.innerText = btn.innerText.includes('Prompt') ? '📋 Copy Prompt' : '📋 Copy Caption';
-                }, 2000);
+                showToast('✅ Copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('✅ Copied to clipboard!');
             });
+        }
+
+        // Show Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Copy All Prompts
+        function copyAllPrompts() {
+            let allPrompts = '';
+            for (let i = 1; i <= 5; i++) {
+                const prompt = document.getElementById('prompt-' + i);
+                if (prompt) {
+                    allPrompts += `=== POST ${i} ===\n${prompt.innerText}\n\n`;
+                }
+            }
+            
+            navigator.clipboard.writeText(allPrompts).then(() => {
+                showToast('✅ All 5 prompts copied!');
+            });
+        }
+
+        // Open Kie.ai
+        function scrollToKie() {
+            window.open('https://kie.ai', '_blank');
         }
     </script>
 </body>
